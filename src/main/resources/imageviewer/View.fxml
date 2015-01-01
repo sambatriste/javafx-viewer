@@ -8,11 +8,15 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml" fx:controller="imageviewer.ViewController">
+<BorderPane prefHeight="400.0"
+            prefWidth="300.0"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="imageviewer.ViewController">
+
   <center>
-    <ScrollPane>
+    <ScrollPane onKeyReleased="#handleKeyPress">
       <content>
-        <ImageView fx:id="view" preserveRatio="true" />
+        <ImageView fx:id="view" preserveRatio="true"/>
       </content>
     </ScrollPane>
   </center>
@@ -21,21 +25,21 @@
       <menus>
         <Menu text="_File">
           <items>
-            <MenuItem  onAction="#handleOpen" text="_Open">
+            <MenuItem onAction="#handleOpen" text="_Open">
               <accelerator>
-                <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
               </accelerator>
             </MenuItem>
             <MenuItem onAction="#handleExit" text="E_xit">
               <accelerator>
-                <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
               </accelerator>
             </MenuItem>
           </items>
         </Menu>
         <Menu text="_Edit">
           <items>
-            <CheckMenuItem fx:id="fitSizeItem" onAction="#handleFitSize" text="Fit Size" selected="true" />
+            <CheckMenuItem fx:id="fitSizeItem" onAction="#handleFitSize" text="Fit Size" selected="true"/>
           </items>
         </Menu>
       </menus>
