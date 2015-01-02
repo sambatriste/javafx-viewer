@@ -11,17 +11,11 @@
 <BorderPane prefHeight="400.0"
             prefWidth="300.0"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="imageviewer.ViewController">
+            fx:controller="imageviewer.ViewController"
+        onKeyReleased="#handleKeyPress">
 
-  <center>
-    <ScrollPane onKeyReleased="#handleKeyPress">
-      <content>
-        <ImageView fx:id="view" preserveRatio="true"/>
-      </content>
-    </ScrollPane>
-  </center>
   <top>
-    <MenuBar fx:id="menubar">
+    <MenuBar fx:id="menuBar">
       <menus>
         <Menu text="_File">
           <items>
@@ -45,4 +39,14 @@
       </menus>
     </MenuBar>
   </top>
+  <center>
+    <ScrollPane>
+      <content>
+        <HBox>
+          <ImageView fx:id="leftView" preserveRatio="false"/>
+          <ImageView fx:id="rightView" preserveRatio="false"/>
+        </HBox>
+      </content>
+    </ScrollPane>
+  </center>
 </BorderPane>

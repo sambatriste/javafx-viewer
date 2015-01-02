@@ -1,9 +1,7 @@
 package imageviewer
-import javafx.scene.image.Image
 
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
-import imageviewer.ImageArchive;
 /**
  * Created with IntelliJ IDEA.
  * User: kawasaki
@@ -24,17 +22,25 @@ class ZippedArchive implements ImageArchive {
   }
 
   private static List<ZipEntry> extractEntriesOf(ZipFile zip) {
-    return zip.entries().findAll { ZipEntry e ->
+
+    def entries = zip.entries().findAll { ZipEntry e ->
       return !e.directory
-    } as List<ZipEntry>
+    }
+    entries.sort(new Comparator<ZipEntry>() {
+      @Override
+      int compare(ZipEntry o1, ZipEntry o2) {
+        return o1.name.compareTo(o2.name)
+      }
+    })
+    return Collections.unmodifiableList(entries)
   }
 
   @Override
-  Image getAt(int index) {
+  NamedImage getAt(int index) {
     assert isInRange(index)
     String nameOfEntry = entries.get(index)
     def entry = zipFile.getEntry(nameOfEntry)
-    return new Image(zipFile.getInputStream(entry));
+    return new NamedImage(entry.name, zipFile.getInputStream(entry));
   }
 
   private boolean isInRange(int index) {
@@ -42,13 +48,13 @@ class ZippedArchive implements ImageArchive {
   }
 
   @Override
-  Image next() {
+  NamedImage next() {
     index = nextIndex()
     return getAt(index)
   }
 
   @Override
-  Image previous() {
+  NamedImage previous() {
     index = previousIndex()
     return getAt(index)
   }
@@ -70,12 +76,12 @@ class ZippedArchive implements ImageArchive {
   }
 
   @Override
-  void set(Image image) {
+  void set(NamedImage image) {
     throw new UnsupportedOperationException()
   }
 
   @Override
-  void add(Image image) {
+  void add(NamedImage image) {
     throw new UnsupportedOperationException()
   }
 
