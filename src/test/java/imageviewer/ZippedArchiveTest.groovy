@@ -1,5 +1,6 @@
-package imageviewer.zip
+package imageviewer
 
+import imageviewer.ZippedArchive
 import javafx.scene.image.Image
 import org.junit.After
 import org.junit.Test
