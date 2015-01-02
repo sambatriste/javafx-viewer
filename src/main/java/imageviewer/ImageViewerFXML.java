@@ -11,9 +11,13 @@ public class ImageViewerFXML extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("Image Viewer FXML");
 
-        // FXMLファイルをロードする      
-        BorderPane root = FXMLLoader.load(getClass().getResource("View.fxml"));
+        // FXMLファイルをロードする
+        FXMLLoader loader = new FXMLLoader();
+        loader.load(getClass().getResourceAsStream("View.fxml"));
+        BorderPane root = loader.getRoot();
         Scene scene = new Scene(root);
+        ViewController controller = loader.getController();
+        scene.setOnKeyReleased(controller::handleKeyPress);
 
         stage.setScene(scene);
         stage.show();

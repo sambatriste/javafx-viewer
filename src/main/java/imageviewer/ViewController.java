@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -15,14 +14,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ViewController implements Initializable {
-    private final static int FIT_WIDTH = 290;
-    private final static int FIT_HEIGHT = 370;
+
 
     @FXML
     private MenuBar menuBar;
-
-    @FXML
-    private CheckMenuItem fitSizeItem;
 
     @FXML
     private ImageView leftView;
@@ -61,18 +56,6 @@ public class ViewController implements Initializable {
         rightView.setImage(right);
     }
 
-    @FXML
-    public void handleFitSize(ActionEvent event) {
-//        if (fitSizeItem.isSelected()) {
-//            view.setFitWidth(FIT_WIDTH);
-//            view.setFitHeight(FIT_HEIGHT);
-//        } else {
-//            view.setFitWidth(0);
-//            view.setFitHeight(0);
-//        }
-    }
-
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -93,7 +76,6 @@ public class ViewController implements Initializable {
             default:
                 break;
         }
-
         System.out.println("event = " + event);
     }
 

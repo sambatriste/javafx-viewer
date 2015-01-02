@@ -11,8 +11,7 @@
 <BorderPane prefHeight="400.0"
             prefWidth="300.0"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="imageviewer.ViewController"
-        onKeyReleased="#handleKeyPress">
+            fx:controller="imageviewer.ViewController">
 
   <top>
     <MenuBar fx:id="menuBar">
@@ -32,9 +31,6 @@
           </items>
         </Menu>
         <Menu text="_Edit">
-          <items>
-            <CheckMenuItem fx:id="fitSizeItem" onAction="#handleFitSize" text="Fit Size" selected="true"/>
-          </items>
         </Menu>
       </menus>
     </MenuBar>
