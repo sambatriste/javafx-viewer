@@ -16,11 +16,11 @@ class NamedImage extends Image {
     this.name = name
   }
 
-
   @Override
   public String toString() {
     return "NamedImage{" +
             "name='" + name + '\'' +
             '}';
   }
+
 }

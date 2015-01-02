@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
@@ -15,6 +16,8 @@ import java.util.ResourceBundle;
 
 public class ViewController implements Initializable {
 
+    @FXML
+    private ScrollPane main;
 
     @FXML
     private MenuBar menuBar;
@@ -32,7 +35,6 @@ public class ViewController implements Initializable {
         Platform.exit();
     }
 
-//    ImageArchive archive;
     private DoublePageIterator pageItr;
 
     @FXML
@@ -64,7 +66,6 @@ public class ViewController implements Initializable {
         chooser.setInitialDirectory(new File("."));
     }
 
-    @FXML
     public void handleKeyPress(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT:
