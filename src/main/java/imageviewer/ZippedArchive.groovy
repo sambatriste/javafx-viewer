@@ -116,8 +116,15 @@ class ZippedArchive implements ImageArchive {
 
   @Override
   boolean hasNext() {
-    int lastEffectiveIndex = entries.size() - 1;
     return index < lastEffectiveIndex
+  }
+
+  /**
+   * エントリ終端のインデックスを取得する。
+   * @return
+   */
+  private int getLastEffectiveIndex() {
+    return entries.size() - 1
   }
 
   @Override

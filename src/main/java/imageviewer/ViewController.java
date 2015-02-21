@@ -121,18 +121,33 @@ public class ViewController implements Initializable {
      * ウィンドウの縦幅　＞　縮小した縦幅のとき、を縮小する。
      * どちらか
      */
-    public final ChangeListener<Number> heightListener = new ChangeListener<Number>() {
-        @Override
-        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-
-        }
+    public final ChangeListener<Number> heightListener = (observable, oldValue, newValue) -> {
+        System.out.println("height = " + newValue);
+        onChangeHeight(leftView, newValue);
+        onChangeHeight(rightView, newValue);
     };
+    private void onChangeHeight(ImageView imageView, Number newValue) {
+        Ratio ratio = new Ratio(imageView.getImage());
+        double height = newValue.doubleValue();
+        double width = ratio.getWidthOfHeight(height);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
+    }
+    private void onChangeWidth(ImageView imageView, Number newValue) {
+
+        Ratio ratio = new Ratio(imageView.getImage());
+        double width = newValue.doubleValue();
+        double height = ratio.getHeightOfWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
+    }
 
     public final ChangeListener<Number> widthListener = new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
             System.out.println("width = " + newValue);
+            onChangeWidth(leftView, newValue);
+            onChangeWidth(rightView, newValue);
         }
     };
 }

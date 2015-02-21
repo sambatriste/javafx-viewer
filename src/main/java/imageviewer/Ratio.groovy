@@ -18,7 +18,7 @@ class Ratio {
    * @param image 画像
    */
   Ratio(Image image) {
-    this(image.width, image.height)
+    this(image?.width ?: 0, image?.height ?: 0)
   }
 
   /**
