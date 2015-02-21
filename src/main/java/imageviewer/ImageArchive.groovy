@@ -1,9 +1,6 @@
 package imageviewer
 /**
- * Created with IntelliJ IDEA.
- * User: kawasaki
- * Date: 14/12/31
- * Time: 20:06
+ * 画像アーカイブを表すインタフェース。
  */
 interface ImageArchive extends ListIterator<NamedImage>, Closeable {
 

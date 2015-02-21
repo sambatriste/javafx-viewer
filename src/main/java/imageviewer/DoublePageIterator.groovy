@@ -3,15 +3,17 @@ package imageviewer
 import javafx.scene.image.Image
 
 /**
- * Created with IntelliJ IDEA.
- * User: kawasaki
- * Date: 15/01/02
- * Time: 12:59
+ * 見開きページのイテレータ。
  */
 class DoublePageIterator implements ListIterator<DoublePage> {
 
+  /** 読み込み元となる画像アーカイブ */
   final ImageArchive archive;
 
+  /**
+   * コンストラクタ。
+   * @param archive 読み込み元となる画像アーカイブ
+   */
   DoublePageIterator(ImageArchive archive) {
     this.archive = archive
   }
@@ -55,16 +57,19 @@ class DoublePageIterator implements ListIterator<DoublePage> {
   }
 
   @Override
+  @Deprecated
   void remove() {
     throw new UnsupportedOperationException()
   }
 
   @Override
+  @Deprecated
   void set(DoublePage doublePage) {
     throw new UnsupportedOperationException()
   }
 
   @Override
+  @Deprecated
   void add(DoublePage doublePage) {
     throw new UnsupportedOperationException()
   }

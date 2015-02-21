@@ -1,6 +1,8 @@
 package imageviewer;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +16,13 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * コントロールクラス。
+ */
 public class ViewController implements Initializable {
+
+    @FXML
+    DoublePageHBox doublePage;
 
     @FXML
     private ScrollPane main;
@@ -29,6 +37,7 @@ public class ViewController implements Initializable {
     private ImageView rightView;
 
     private final FileChooser chooser = new FileChooser();
+
 
     @FXML
     public void handleExit(ActionEvent event) {
@@ -63,7 +72,15 @@ public class ViewController implements Initializable {
 
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Zip", "*.zip");
         chooser.getExtensionFilters().add(filter);
-        chooser.setInitialDirectory(new File("."));
+        chooser.setInitialDirectory(initialDir());
+    }
+
+    private File initialDir() {
+        File home = new File(System.getProperty("user.home"));
+        File ini = new File(home, "Downloads");
+        assert ini.exists() : ini.getAbsolutePath();
+        return ini;
+
     }
 
     public void handleKeyPress(KeyEvent event) {
@@ -85,7 +102,7 @@ public class ViewController implements Initializable {
             DoublePage doublePage = pageItr.next();
             setImages(doublePage);
         } else {
-            System.out.println("no more image." );
+            System.out.println("no more image.");
         }
     }
 
@@ -98,4 +115,24 @@ public class ViewController implements Initializable {
         }
     }
 
+    /**
+     * ウィンドウのサイズを受け取る。
+     * ウィンドウの横幅　＞　画像の横幅のとき、横幅を縮小する。
+     * ウィンドウの縦幅　＞　縮小した縦幅のとき、を縮小する。
+     * どちらか
+     */
+    public final ChangeListener<Number> heightListener = new ChangeListener<Number>() {
+        @Override
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+
+        }
+    };
+
+    public final ChangeListener<Number> widthListener = new ChangeListener<Number>() {
+        @Override
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            System.out.println("width = " + newValue);
+        }
+    };
 }

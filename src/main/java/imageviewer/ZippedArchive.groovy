@@ -1,26 +1,42 @@
 package imageviewer
 
+import java.nio.charset.Charset
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 /**
- * Created with IntelliJ IDEA.
- * User: kawasaki
- * Date: 14/12/31
- * Time: 18:53
+ * Zip圧縮された画像イメージ
  */
 class ZippedArchive implements ImageArchive {
 
+  /** 入力元ファイル*/
   private final File source
+
+  /** Zipファイル */
   private final ZipFile zipFile
+
+  /** Zipファイル内のエントリ */
   private final List<ZipEntry> entries
+
+  /** エントリのインデックス*/
   private int index = -1;
 
+  /**
+   * コンストラクタ。
+   * @param source 入力元ファイル
+   */
   ZippedArchive(File source) {
     this.source = source
-    zipFile = new ZipFile(source)
+    zipFile = new ZipFile(source, Charset.forName('windows-31j'))
     entries = extractEntriesOf(zipFile)
   }
 
+  /**
+   * 指定されたファイルからエントリを抽出する。
+   * 順序はエントリ名の辞書順となる。
+   *
+   * @param zip 入力元Zip
+   * @return エントリ
+   */
   private static List<ZipEntry> extractEntriesOf(ZipFile zip) {
 
     def entries = zip.entries().findAll { ZipEntry e ->
@@ -43,8 +59,13 @@ class ZippedArchive implements ImageArchive {
     return new NamedImage(entry.name, zipFile.getInputStream(entry));
   }
 
+  /**
+   * 指定されたインデックスが範囲内かどうか判定する。
+   * @param index インデックス
+   * @return 範囲内である場合、真
+   */
   private boolean isInRange(int index) {
-    return 0 <= index && index <= lastIndex
+    return 0 <= index && index <= lastEffectiveIndex
   }
 
   @Override
@@ -71,16 +92,19 @@ class ZippedArchive implements ImageArchive {
   }
 
   @Override
+  @Deprecated
   void remove() {
     throw new UnsupportedOperationException()
   }
 
   @Override
+  @Deprecated
   void set(NamedImage image) {
     throw new UnsupportedOperationException()
   }
 
   @Override
+  @Deprecated
   void add(NamedImage image) {
     throw new UnsupportedOperationException()
   }
@@ -92,15 +116,8 @@ class ZippedArchive implements ImageArchive {
 
   @Override
   boolean hasNext() {
-    return index < lastIndex
-  }
-
-  private int getLastIndex() {
-    numberOfPictures - 1
-  }
-
-  private int getNumberOfPictures() {
-    return entries.size()
+    int lastEffectiveIndex = entries.size() - 1;
+    return index < lastEffectiveIndex
   }
 
   @Override
