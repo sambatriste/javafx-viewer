@@ -8,18 +8,48 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.input.KeyCombination?>
 <BorderPane prefHeight="400.0"
-            prefWidth="300.0"
+            prefWidth="800.0"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="imageviewer.ViewController">
 
   <top>
     <!-- メニューバー -->
     <MenuBar fx:id="menuBar">
+      <Menu text="_Page">
+        <MenuItem onAction="#nextImage" text="_Next">
+          <accelerator>
+            <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+          </accelerator>
+        </MenuItem>
+        <MenuItem onAction="#previousImage" text="_Next">
+          <accelerator>
+            <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+          </accelerator>
+        </MenuItem>
+      </Menu>
+
+
       <Menu text="_File">
         <MenuItem onAction="#handleOpen" text="_Open">
           <accelerator>
             <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+          </accelerator>
+        </MenuItem>
+        <MenuItem onAction="#handleDelete" text="_Delete">
+          <accelerator>
+            <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+          </accelerator>
+        </MenuItem>
+        <MenuItem onAction="#handleNextFile" text="_NextFile">
+          <accelerator>
+            <KeyCodeCombination alt="UP" code="J" control="UP" meta="UP" shift="UP" shortcut="UP"/>
+          </accelerator>
+        </MenuItem>
+        <MenuItem onAction="#handlePreviousFile" text="_PreviousFile">
+          <accelerator>
+            <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP" shortcut="UP"/>
           </accelerator>
         </MenuItem>
         <MenuItem onAction="#handleExit" text="E_xit">

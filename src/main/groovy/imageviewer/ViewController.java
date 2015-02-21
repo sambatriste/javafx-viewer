@@ -1,18 +1,27 @@
 package imageviewer;
 
+import imageviewer.file.FileDeleter;
+import imageviewer.file.FileIterator;
+import imageviewer.file.SortOrder;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -21,8 +30,6 @@ import java.util.ResourceBundle;
  */
 public class ViewController implements Initializable {
 
-    @FXML
-    DoublePageHBox doublePage;
 
     @FXML
     private ScrollPane main;
@@ -38,6 +45,13 @@ public class ViewController implements Initializable {
 
     private final FileChooser chooser = new FileChooser();
 
+    private File currentFile;
+    private FileIterator fileIterator;
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     @FXML
     public void handleExit(ActionEvent event) {
@@ -48,13 +62,74 @@ public class ViewController implements Initializable {
 
     @FXML
     public void handleOpen(ActionEvent event) {
-        File file = chooser.showOpenDialog(null);
-        if (file == null) {
+        File chosen = chooser.showOpenDialog(null);
+        if (chosen == null) {
             return;
+
         }
+        fileIterator = new FileIterator(chosen, SortOrder.ALPHABETIC, "[^.]*\\.zip");
+        open(chosen);
+    }
+
+    private void open(File file) {
+        currentFile = file;
         ImageArchive archive = new ZippedArchive(file);
         pageItr = new DoublePageIterator(archive);
+        stage.setTitle(file.getName());
         nextImage();
+    }
+
+    @FXML
+    public void handleDelete(ActionEvent event) throws IOException {
+        if (currentFile == null) {
+            return;
+        }
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("削除確認");
+        DialogPane dialog = alert.getDialogPane();
+        dialog.setContentText("対象ファイル=[" + currentFile.getName() + "]\n" +
+                                      "ファイルを消しますか？");
+        ButtonType buttonType = alert.showAndWait().orElse(ButtonType.CANCEL);
+        if (!buttonType.equals(ButtonType.OK)) return;
+
+
+        //assert currentFile.delete();
+        FileDeleter.delete(currentFile);
+        System.out.println("file deleted. [" + currentFile.getName() + "]");
+        fileIterator.remove();
+        nextFile();
+    }
+
+    @FXML
+    public void handleNextFile(ActionEvent event) {
+        nextFile();
+    }
+
+    private void nextFile() {
+        if (!isOpened() || !fileIterator.hasNext()) {
+            return;
+        }
+        File f = fileIterator.next();
+        if (f.equals(currentFile)) {
+            f = fileIterator.next();
+        }
+        open(f);
+    }
+
+    @FXML
+    public void handlePreviousFile(ActionEvent event) {
+        if (!isOpened() || !fileIterator.hasPrevious()) {
+            return;
+        }
+        File f = fileIterator.previous();
+        if (f.equals(currentFile)) {
+            f = fileIterator.previous();
+        }
+        open(f);
+    }
+
+    private boolean isOpened() {
+        return currentFile != null;
     }
 
     private void setImages(DoublePage doublePage) {
@@ -65,6 +140,8 @@ public class ViewController implements Initializable {
         NamedImage right = doublePage.getRight();
         System.out.println("right = " + right);
         rightView.setImage(right);
+
+        resize();
     }
 
     @Override
@@ -77,9 +154,8 @@ public class ViewController implements Initializable {
 
     private File initialDir() {
         File home = new File(System.getProperty("user.home"));
-        File ini = new File(home, "Downloads");
-        assert ini.exists() : ini.getAbsolutePath();
-        return ini;
+        assert home.exists();
+        return home;
 
     }
 
@@ -97,7 +173,8 @@ public class ViewController implements Initializable {
         System.out.println("event = " + event);
     }
 
-    private void nextImage() {
+    @FXML
+    public void nextImage() {
         if (pageItr.hasNext()) {
             DoublePage doublePage = pageItr.next();
             setImages(doublePage);
@@ -106,13 +183,19 @@ public class ViewController implements Initializable {
         }
     }
 
-    private void previousImage() {
+    @FXML
+    public void previousImage() {
         if (pageItr.hasPrevious()) {
             DoublePage doublePage = pageItr.previous();
             setImages(doublePage);
         } else {
             System.out.println("no more image before.");
         }
+    }
+
+    private void resize() {
+        onChangeWidth(leftView, leftView.getFitWidth());
+        onChangeWidth(rightView, rightView.getFitWidth());
     }
 
     /**
@@ -129,16 +212,18 @@ public class ViewController implements Initializable {
     private void onChangeHeight(ImageView imageView, Number newValue) {
         Ratio ratio = new Ratio(imageView.getImage());
         double height = newValue.doubleValue();
-        double width = ratio.getWidthOfHeight(height);
-        imageView.setFitHeight(height);
-        imageView.setFitWidth(width);
+        double width = ratio.getWidthFrom(height);
+        resetSize(imageView, width, height);
     }
     private void onChangeWidth(ImageView imageView, Number newValue) {
-
         Ratio ratio = new Ratio(imageView.getImage());
         double width = newValue.doubleValue();
-        double height = ratio.getHeightOfWidth(width);
-        imageView.setFitHeight(height);
+        double height = ratio.getHeightFrom(width);
+        resetSize(imageView, width, height);
+    }
+
+    private void resetSize(ImageView imageView, double width, double height) {
+        imageView.setFitHeight(height - 20);
         imageView.setFitWidth(width);
     }
 

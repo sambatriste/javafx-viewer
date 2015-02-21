@@ -36,7 +36,7 @@ class Ratio {
    * @param newWidth 幅
    * @return 高さ
    */
-  double getHeightOfWidth(double newWidth) {
+  double getHeightFrom(double newWidth) {
     return newWidth * height / width
   }
 
@@ -45,7 +45,7 @@ class Ratio {
    * @param newHeight 高さ
    * @return 幅
    */
-  double getWidthOfHeight(double newHeight) {
+  double getWidthFrom(double newHeight) {
     return width * newHeight / height
   }
 

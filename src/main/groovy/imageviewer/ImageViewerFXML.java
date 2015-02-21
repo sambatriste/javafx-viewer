@@ -32,12 +32,16 @@ public class ImageViewerFXML extends Application {
 
     ViewController controller;
 
+
+
     @Override
     public void start(Stage stage) throws Exception {
+
         stage.setTitle("Image Viewer FXML");
 
         Parent root = prepareParent();
         Scene scene = prepareScene(root);
+        controller.setStage(stage);
 
         stage.setScene(scene);
         stage.show();

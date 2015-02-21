@@ -51,11 +51,11 @@ class ZippedArchive implements ImageArchive {
     return Collections.unmodifiableList(entries)
   }
 
+
   @Override
   NamedImage getAt(int index) {
     assert isInRange(index)
-    String nameOfEntry = entries.get(index)
-    def entry = zipFile.getEntry(nameOfEntry)
+    ZipEntry entry = entries.get(index)
     return new NamedImage(entry.name, zipFile.getInputStream(entry));
   }
 

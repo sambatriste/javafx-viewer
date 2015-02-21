@@ -16,7 +16,7 @@ class RatioTest extends GroovyTestCase {
 
     assert ratio.width == 1
     assert ratio.height == 2
-    assert ratio.getHeightOfWidth(2) == 4
-    assert ratio.getWidthOfHeight(1) == 0.5
+    assert ratio.getHeightFrom(2) == 4
+    assert ratio.getWidthFrom(1) == 0.5D
   }
 }
