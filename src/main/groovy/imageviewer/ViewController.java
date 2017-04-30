@@ -219,11 +219,11 @@ public class ViewController implements Initializable {
         Ratio ratio = new Ratio(imageView.getImage());
         double width = newValue.doubleValue();
         double height = ratio.getHeightFrom(width);
-        resetSize(imageView, width, height);
+        resetSize(imageView, width , height);
     }
 
     private void resetSize(ImageView imageView, double width, double height) {
-        imageView.setFitHeight(height - 20);
+        imageView.setFitHeight(height - 35);
         imageView.setFitWidth(width);
     }
 
