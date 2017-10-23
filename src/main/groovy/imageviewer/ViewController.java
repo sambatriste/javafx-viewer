@@ -77,6 +77,9 @@ public class ViewController implements Initializable {
         pageItr = new DoublePageIterator(archive);
         stage.setTitle(file.getName());
         nextImage();
+        onChangeWidth(leftView, leftView.getFitWidth());
+        onChangeWidth(rightView, rightView.getFitWidth());
+
     }
 
     @FXML
@@ -209,21 +212,22 @@ public class ViewController implements Initializable {
         onChangeHeight(leftView, newValue);
         onChangeHeight(rightView, newValue);
     };
-    private void onChangeHeight(ImageView imageView, Number newValue) {
+    private void onChangeHeight(ImageView imageView, Number newHeight) {
         Ratio ratio = new Ratio(imageView.getImage());
-        double height = newValue.doubleValue();
+        double height = newHeight.doubleValue();
         double width = ratio.getWidthFrom(height);
         resetSize(imageView, width, height);
     }
-    private void onChangeWidth(ImageView imageView, Number newValue) {
+    private void onChangeWidth(ImageView imageView, Number newWidth) {
         Ratio ratio = new Ratio(imageView.getImage());
-        double width = newValue.doubleValue();
+        double width = newWidth.doubleValue();
         double height = ratio.getHeightFrom(width);
         resetSize(imageView, width , height);
     }
 
     private void resetSize(ImageView imageView, double width, double height) {
-        imageView.setFitHeight(height - 35);
+        height -= 40;
+        imageView.setFitHeight(height);
         imageView.setFitWidth(width);
     }
 
