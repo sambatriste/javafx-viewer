@@ -42,12 +42,8 @@ class ZippedArchive implements ImageArchive {
     def entries = zip.entries().findAll { ZipEntry e ->
       return !e.directory
     }
-//    entries.sort(new Comparator<ZipEntry>() {
-//      @Override
-//      int compare(ZipEntry o1, ZipEntry o2) {
-//        return o1.name.compareTo(o2.name)
-//      }
-//    })
+    entries.sort(new ZipEntryComparator())
+    println entries
     return Collections.unmodifiableList(entries)
   }
 
