@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 
 sourceCompatibility = 1.8
-version = '1.0'
+version = '1.0.0'
 
 repositories {
   mavenLocal()
@@ -15,7 +15,7 @@ dependencies {
 }
 
 wrapper {
-  version = 2.7
+  gradleVersion = 4.7
 }
 
 
