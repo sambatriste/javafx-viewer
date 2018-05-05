@@ -67,7 +67,7 @@ public class ViewController implements Initializable {
             return;
 
         }
-        fileIterator = new FileIterator(chosen, SortOrder.ALPHABETIC, "[^.]*\\.zip");
+        fileIterator = new FileIterator(chosen, SortOrder.ALPHABETIC, ".+\\.zip$");
         open(chosen);
     }
 
