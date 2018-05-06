@@ -33,7 +33,7 @@ class FileIteratorTest extends GroovyTestCase {
   }
 
   void testSortByTimestamp() {
-    FileIterator sut = FileIterator.fromChosenFile(dir, SortOrder.TIMESTAMP, '.*zip.*')
+    FileIterator sut = FileIterator.fromDirectory(dir, SortOrder.TIMESTAMP, '.*zip.*')
     File next
     assert sut.hasNext()
 
@@ -54,11 +54,13 @@ class FileIteratorTest extends GroovyTestCase {
   }
 
   private static void touch(File dir, long sleep, String... files) {
+    long timeToAdd = 0
     for (String e : files) {
       File newFile = new File(dir, e)
       if (!newFile.exists()) {
         newFile.createNewFile()
-        Thread.sleep(sleep)
+        newFile.lastModified = newFile.lastModified() + timeToAdd
+        timeToAdd += 1000
         assert newFile.absolutePath : newFile.exists()
       }
     }
