@@ -1,4 +1,4 @@
-package imageviewer
+package imageviewer.archive.zip
 
 import java.util.regex.Pattern
 import java.util.zip.ZipEntry

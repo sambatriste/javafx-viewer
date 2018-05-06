@@ -1,5 +1,8 @@
 package imageviewer;
 
+import imageviewer.archive.ImageArchive;
+import imageviewer.archive.ImageArchiveBase;
+import imageviewer.archive.zip.ZipArchiver;
 import imageviewer.file.FileDeleter;
 import imageviewer.file.FileIterator;
 import imageviewer.file.SortOrder;
@@ -24,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.zip.ZipEntry;
 
 /**
  * コントロールクラス。
@@ -67,13 +71,13 @@ public class ViewController implements Initializable {
             return;
 
         }
-        fileIterator = new FileIterator(chosen, SortOrder.ALPHABETIC, ".+\\.zip$");
+        fileIterator = FileIterator.fromChosenFile(chosen, SortOrder.ALPHABETIC, ".+\\.zip$");
         open(chosen);
     }
 
     private void open(File file) {
         currentFile = file;
-        ImageArchive archive = new ZippedArchive(file);
+        ImageArchive archive = new ImageArchiveBase<>(new ZipArchiver(file));
         pageItr = new DoublePageIterator(archive);
         stage.setTitle(file.getName());
         nextImage();

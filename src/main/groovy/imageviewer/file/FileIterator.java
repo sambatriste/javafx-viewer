@@ -20,21 +20,20 @@ public class FileIterator implements ListIterator<File> {
 
     private ListIterator<File> itr;
 
-    public FileIterator(File dir, SortOrder sortOrder, String regexp) {
-        this(dir, sortOrder, Pattern.compile(regexp));
+    public static FileIterator fromChosenFile(File chosen, SortOrder sortOrder, String regexp) {
+        File dir = chosen.getParentFile();
+        return fromDirectory(dir, sortOrder, regexp);
+    }
+
+    public static FileIterator fromDirectory(File directory, SortOrder sortOrder, String regexp) {
+        return new FileIterator(directory,
+                                sortOrder,
+                                pathname -> Pattern.compile(regexp)
+                                                   .matcher(pathname.getName()).matches());
     }
 
 
-    public FileIterator(File dir, SortOrder sortOrder, Pattern ptn) {
-        this(dir, sortOrder, new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return ptn.matcher(pathname.getName()).matches();
-            }
-        });
-    }
-
-    public FileIterator(File dir, SortOrder sortOrder, FileFilter fileFilter) {
+    FileIterator(File dir, SortOrder sortOrder, FileFilter fileFilter) {
         this.dir = dir;
         if (!dir.exists() || !dir.isDirectory()) {
             throw new IllegalArgumentException("directory not found. [${dir.absolutePath}]");
@@ -45,7 +44,6 @@ public class FileIterator implements ListIterator<File> {
 
         sortedFiles = sortOrder.sort(files);
         itr = sortedFiles.listIterator();
-
     }
 
     private File find(File target) {

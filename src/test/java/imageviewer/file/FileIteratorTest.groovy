@@ -22,8 +22,7 @@ class FileIteratorTest extends GroovyTestCase {
   }
 
   void testSortAlphabetically() {
-    FileIterator sut = new FileIterator(
-            dir, SortOrder.ALPHABETIC, '.*\\.zip$')
+    FileIterator sut = FileIterator.fromDirectory(dir, SortOrder.ALPHABETIC, '.*\\.zip$')
     assert sut.hasNext()
     assert sut.next().name == 'aaa.zip'
 
@@ -34,8 +33,7 @@ class FileIteratorTest extends GroovyTestCase {
   }
 
   void testSortByTimestamp() {
-    FileIterator sut = new FileIterator(
-            dir, SortOrder.TIMESTAMP, '.*zip.*')
+    FileIterator sut = FileIterator.fromChosenFile(dir, SortOrder.TIMESTAMP, '.*zip.*')
     File next
     assert sut.hasNext()
 

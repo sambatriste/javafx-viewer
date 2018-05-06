@@ -1,5 +1,8 @@
-package imageviewer
+package imageviewer.archive.zip
 
+import imageviewer.archive.Archiver
+import imageviewer.archive.ImageArchive
+import imageviewer.archive.ImageArchiveBase
 import javafx.scene.image.Image
 import org.junit.After
 import org.junit.Test
@@ -13,7 +16,7 @@ import org.junit.Test
 class ZippedArchiveTest extends GroovyTestCase {
 
   def file = new File(getClass().getResource('/img.zip').toURI())
-  ZippedArchive sut = new ZippedArchive(file)
+  ImageArchive sut = new ImageArchiveBase(new ZipArchiver(file))
 
   @Test
   void testNext() {

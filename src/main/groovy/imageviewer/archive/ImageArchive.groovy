@@ -1,4 +1,7 @@
-package imageviewer
+package imageviewer.archive
+
+import imageviewer.NamedImage
+
 /**
  * 画像アーカイブを表すインタフェース。
  */

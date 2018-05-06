@@ -1,4 +1,4 @@
-package imageviewer
+package imageviewer.archive.zip
 
 import org.junit.Test
 

@@ -1,5 +1,6 @@
 package imageviewer
 
+import imageviewer.archive.ImageArchive
 import javafx.scene.image.Image
 
 /**

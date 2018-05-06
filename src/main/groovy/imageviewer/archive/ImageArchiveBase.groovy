@@ -1,58 +1,30 @@
-package imageviewer
+package imageviewer.archive
 
-import java.nio.charset.Charset
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
-/**
- * Zip圧縮された画像イメージ
- */
-class ZippedArchive implements ImageArchive {
+import imageviewer.NamedImage
 
-  /** 入力元ファイル*/
-  private final File source
-
-  /** Zipファイル */
-  private final ZipFile zipFile
+class ImageArchiveBase<E> implements ImageArchive {
 
   /** Zipファイル内のエントリ */
-  private final List<ZipEntry> entries
+  private final List<E> entries
 
   /** エントリのインデックス*/
   private int index = -1;
 
+  private final Archiver<E> archiver
   /**
    * コンストラクタ。
    * @param source 入力元ファイル
    */
-  ZippedArchive(File source) {
-    this.source = source
-    zipFile = new ZipFile(source, Charset.forName('windows-31j'))
-    entries = extractEntriesOf(zipFile)
+  ImageArchiveBase(Archiver<E> archiver) {
+    this.entries = archiver.createEntries()
+    this.archiver = archiver
   }
-
-  /**
-   * 指定されたファイルからエントリを抽出する。
-   * 順序はエントリ名の辞書順となる。
-   *
-   * @param zip 入力元Zip
-   * @return エントリ
-   */
-  private static List<ZipEntry> extractEntriesOf(ZipFile zip) {
-
-    def entries = zip.entries().findAll { ZipEntry e ->
-      return !e.directory
-    }
-    entries.sort(new ZipEntryComparator())
-    println entries
-    return Collections.unmodifiableList(entries)
-  }
-
 
   @Override
   NamedImage getAt(int index) {
     assert isInRange(index)
-    ZipEntry entry = entries.get(index)
-    return new NamedImage(entry.name, zipFile.getInputStream(entry));
+    E entry = entries.get(index)
+    return archiver.createImageOf(entry)
   }
 
   /**
@@ -123,8 +95,8 @@ class ZippedArchive implements ImageArchive {
     return entries.size() - 1
   }
 
-  @Override
-  void close() {
-    zipFile.close()
+  @Override void close() {
+    archiver.close()
   }
+
 }

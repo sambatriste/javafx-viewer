@@ -1,5 +1,6 @@
-package imageviewer
+package imageviewer.archive.zip
 
+import imageviewer.archive.zip.ZipEntryComparator
 import org.junit.Test
 
 class ZipEntryWrapperTest {
