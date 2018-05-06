@@ -1,7 +1,9 @@
 package imageviewer;
 
+import imageviewer.archive.Archiver;
 import imageviewer.archive.ImageArchive;
 import imageviewer.archive.ImageArchiveBase;
+import imageviewer.archive.rar.RarArchiver;
 import imageviewer.archive.zip.ZipArchiver;
 import imageviewer.file.FileDeleter;
 import imageviewer.file.FileIterator;
@@ -71,19 +73,28 @@ public class ViewController implements Initializable {
             return;
 
         }
-        fileIterator = FileIterator.fromChosenFile(chosen, SortOrder.ALPHABETIC, ".+\\.zip$");
+        fileIterator = FileIterator.fromChosenFile(chosen, SortOrder.ALPHABETIC, "(.+\\.zip$|.+\\.rar$)");
         open(chosen);
     }
 
     private void open(File file) {
         currentFile = file;
-        ImageArchive archive = new ImageArchiveBase<>(new ZipArchiver(file));
+        Archiver<?> archiver = createArchiver(file);
+        ImageArchive archive = new ImageArchiveBase<>(archiver);
         pageItr = new DoublePageIterator(archive);
         stage.setTitle(file.getName());
         nextImage();
         onChangeWidth(leftView, leftView.getFitWidth());
         onChangeWidth(rightView, rightView.getFitWidth());
 
+    }
+    private Archiver<?> createArchiver(File file) {
+        if (file.getName().endsWith(".zip")) {
+            return new ZipArchiver(file);
+        } else if (file.getName().endsWith(".rar")) {
+            return new RarArchiver(file);
+        }
+        throw new IllegalArgumentException("unexpected file. " + file);
     }
 
     @FXML
@@ -154,7 +165,8 @@ public class ViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Zip", "*.zip");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                "Zip", "*.zip", "*.rar");
         chooser.getExtensionFilters().add(filter);
         chooser.setInitialDirectory(initialDir());
     }

@@ -1,14 +1,13 @@
 package imageviewer.archive.zip
 
-import imageviewer.archive.zip.ZipEntryComparator
 import org.junit.Test
 
 class ZipEntryWrapperTest {
 
   @Test
   void test() {
-    def first = new ZipEntryComparator.ZipEntryWrapper("2.jpg")
+    def second = new ZipEntryComparator.ZipEntryWrapper("2.jpg")
     def tenth = new ZipEntryComparator.ZipEntryWrapper("10.jpg")
-    assert first.compareTo(tenth) == -1
+    assert second.compareTo(tenth) == -1
   }
 }

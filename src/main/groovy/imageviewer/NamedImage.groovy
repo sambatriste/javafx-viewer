@@ -16,6 +16,7 @@ class NamedImage extends Image {
    */
   NamedImage(String name, InputStream is) {
     super(is)
+    assert name != null
     this.name = name
   }
 
