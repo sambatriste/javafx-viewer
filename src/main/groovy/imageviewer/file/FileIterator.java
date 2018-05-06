@@ -34,8 +34,8 @@ public class FileIterator implements ListIterator<File> {
         });
     }
 
-    public FileIterator(File file, SortOrder sortOrder, FileFilter fileFilter) {
-        this.dir = file.getParentFile();
+    public FileIterator(File dir, SortOrder sortOrder, FileFilter fileFilter) {
+        this.dir = dir;
         if (!dir.exists() || !dir.isDirectory()) {
             throw new IllegalArgumentException("directory not found. [${dir.absolutePath}]");
         }
@@ -45,7 +45,7 @@ public class FileIterator implements ListIterator<File> {
 
         sortedFiles = sortOrder.sort(files);
         itr = sortedFiles.listIterator();
-        find(file);
+
     }
 
     private File find(File target) {

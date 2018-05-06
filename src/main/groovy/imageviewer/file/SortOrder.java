@@ -33,8 +33,7 @@ public enum SortOrder {
     TIMESTAMP {
         @Override
         Comparator<File> getComparator() {
-            return (o1, o2) ->
-                    Long.valueOf(o2.lastModified()).compareTo(o1.lastModified());
+            return Comparator.comparingLong(File::lastModified);
         }
     };
 
