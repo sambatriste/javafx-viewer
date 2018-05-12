@@ -1,5 +1,6 @@
 package imageviewer
 
+import com.sun.org.apache.bcel.internal.generic.NOP
 import imageviewer.archive.ImageArchive
 import javafx.scene.image.Image
 
@@ -26,8 +27,14 @@ class DoublePageIterator implements ListIterator<DoublePage> {
 
   @Override
   DoublePage next() {
+    // 前回が逆方向の場合、1回を多く読み込んで数合わせする
+    if (!forwarding) {
+      archive.next() // NOP
+    }
+    forwarding = true
+
     NamedImage right = archive.next()
-    NamedImage left = archive.next()
+    NamedImage left = hasNext() ? archive.next() : null
     return new DoublePage(left, right)
   }
 
@@ -36,9 +43,17 @@ class DoublePageIterator implements ListIterator<DoublePage> {
     return archive.hasPrevious()
   }
 
+  /** 前回のページ送りの方向 */
+  private boolean forwarding = true
+
   @Override
   DoublePage previous() {
-    Image nop = archive.previous()
+    // 前回が順方向の場合、1回を多く読み込んで数合わせする
+    if (forwarding) {
+      archive.previous()  // NOP
+    }
+    forwarding = false
+
     NamedImage left = archive.previous()
     NamedImage right = archive.previous()
     return new DoublePage(left, right)
